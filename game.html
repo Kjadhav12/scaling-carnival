@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cooking Games Website</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: blueviolet;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            color: #03578b;
+        }
+        .game-container {
+            margin: 20px auto;
+            width: 80%;
+            max-width: 600px;
+            border: 2px solid #ccc;
+            padding: 20px;
+            background-color: rgb(255, 255, 255);
+            border-radius: 10px;
+        }
+        #cake {
+            width: 200px;
+            height: 150px;
+            background-color: #f5deb3;
+            border-radius: 50% 50% 0 0;
+            margin: 20px auto;
+            position: relative;
+            border: 2px solid #8b4513;
+        }
+        .topping {
+            width: 30px;
+            height: 30px;
+            background-color: #ff69b4;
+            border-radius: 50%;
+            cursor: move;
+            position: absolute;
+            display: inline-block;
+            margin: 5px;
+        }
+        #toppings {
+            margin: 10px;
+        }
+        #cook-timer {
+            font-size: 24px;
+            margin: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>hello,Welcome to Cooking Games!</h1>
+    <p>Try these dfun mini-games: Decorate a cake or cook a meal.</p>
+
+    <div class="game-container">
+        <h2>Cake Decorating Game</h2>
+        <p>Drag the toppings onto the cake!</p>
+        <div id="cake"></div>
+        <div id="toppings">
+            <div class="topping" id="topping1"></div>
+            <div class="topping" id="topping2"></div>
+            <div class="topping" id="topping3"></div>
+        </div>
+    </div>
+
+    <div class="game-container">
+        <h2>Quick Cook Game</h2>
+        <p>Click "Start Cooking" and wait for the timer!</p>
+        <div id="cook-timer">Ready to cook?</div>
+        <button id="start-cook">Start Cooking</button>
+    </div>
+
+    <script>
+        // Cake Decorating Game: Drag and Drop
+        const toppings = document.querySelectorAll('.topping');
+        const cake = document.getElementById('cake');
+
+        toppings.forEach(topping => {
+            topping.addEventListener('dragstart', (e) => {
+                e.dataTransfer.setData('text/plain', topping.id);
+            });
+        });
+
+        cake.addEventListener('dragover', (e) => {
+            e.preventDefault();
+        });
+
+        cake.addEventListener('drop', (e) => {
+            e.preventDefault();
+            const toppingId = e.dataTransfer.getData('text/plain');
+            const topping = document.getElementById(toppingId);
+            const rect = cake.getBoundingClientRect();
+            const x = e.clientX - rect.left - 15; // Center the topping
+            const y = e.clientY - rect.top - 15;
+            topping.style.left = `${x}px`;
+            topping.style.top = `${y}px`;
+            topping.style.position = 'absolute';
+            cake.appendChild(topping);
+        });
+
+        // Quick Cook Game: Timer
+        const timerDisplay = document.getElementById('cook-timer');
+        const startButton = document.getElementById('start-cook');
+        let cooking = false;
+
+        startButton.addEventListener('click', () => {
+            if (!cooking) {
+                cooking = true;
+                timerDisplay.textContent = 'Cooking...';
+                startButton.disabled = true;
+                setTimeout(() => {
+                    timerDisplay.textContent = 'Meal ready! Yum!';
+                    startButton.disabled = false;
+                    cooking = false;
+                }, 5000); // 5-second timer
+            }
+        });
+    </script>
+</body>
+</html>
